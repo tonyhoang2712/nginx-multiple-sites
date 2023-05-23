@@ -1,5 +1,8 @@
 version: '3'
 
+networks:
+  laravel:
+
 services:
   php-fpm:
     build:
@@ -9,6 +12,8 @@ services:
       - ./sites/site-one.com/laravel/:/var/www/site-one.com
         # site-two.com:
       - ./sites/site-two.com/laravel/:/var/www/site-two.com
+    networks:
+      - laravel
 
   nginx:
     build:
@@ -33,4 +38,25 @@ services:
       #- "443:443"
     depends_on:
       - php-fpm
+      - mysql
     restart: always
+    networks:
+      - laravel
+  
+  mysql:
+    platform: linux/amd64
+    image: mysql:5.7.29
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root@123
+      MYSQL_ROOT_PASSWORD: root@123
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
