@@ -8,10 +8,10 @@ services:
     build:
       context: ./docker/php-fpm
     volumes:
-        # site-one.com:
-      - ./sites/site-one.com/laravel/:/var/www/site-one.com
-        # site-two.com:
-      - ./sites/site-two.com/laravel/:/var/www/site-two.com
+        # site-api.com:
+      - ./sites/site-api.com/:/var/www/site-api.com
+        # site-web.com:
+      - ./sites/site-web.com/:/var/www/site-web.com
     networks:
       - laravel
 
@@ -22,31 +22,31 @@ services:
         #Nginx Global Configurations
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d
-        # site-one.com:
+        # site-api.com:
         # - Nginx Server block
-      - ./sites/site-one.com/site.conf:/etc/nginx/sites-available/site-one.com.conf
+      - ./docker/nginx/sites-available/site-api.com.conf:/etc/nginx/sites-available/site-api.com.conf
         # - Public Folder:
-      - ./sites/site-one.com/laravel/:/var/www/site-one.com
+      - ./sites/site-api.com/:/var/www/site-api.com
 
-        # site-two.com:
+        # site-web.com:
         # - Nginx Server block
-      - ./sites/site-two.com/site.conf:/etc/nginx/sites-available/site-two.com.conf
+      - ./docker/nginx/sites-available/site-web.com.conf:/etc/nginx/sites-available/site-web.com.conf
         # - Public Folder:
-      - ./sites/site-two.com/laravel/:/var/www/site-two.com
+      - ./sites/site-web.com/:/var/www/site-web.com
     ports:
       - "80:80"
       #- "443:443"
     depends_on:
       - php-fpm
-      - mysql
+      - mysql_bks
     restart: always
     networks:
       - laravel
   
-  mysql:
+  mysql_bks:
     platform: linux/amd64
     image: mysql:5.7.29
-    container_name: mysql
+    container_name: mysql_bks
     restart: unless-stopped
     tty: true
     ports:
@@ -57,6 +57,6 @@ services:
       MYSQL_PASSWORD: root@123
       MYSQL_ROOT_PASSWORD: root@123
       SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      SERVICE_NAME: mysql_bks
     networks:
       - laravel

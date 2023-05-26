@@ -6,9 +6,9 @@ Quickly setup a multi site server,
  
 Your just need to git clone this, docker-compose up,and edit your hosts file (example):
 
-YOUR_DOCKER_CONTAINER_IP    site-one.com
+YOUR_DOCKER_CONTAINER_IP    site-api.com
 
-YOUR_DOCKER_CONTAINER_IP    site-two.com
+YOUR_DOCKER_CONTAINER_IP    site-web.com
 
 On Production:
 (Just set up your DNS normally)
